@@ -1,10 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { auth } from "@/lib/firebase";
+
+import {
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+
+import {
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+
+import { auth, db } from "@/lib/firebase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,113 +23,150 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     setLoading(true);
     setError("");
 
     try {
-      await signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      router.push("/dashboard");
-    } catch (err: any) {
-      switch (err.code) {
-        case "auth/invalid-credential":
-          setError("Invalid email or password.");
-          break;
+      const user = userCredential.user;
 
-        case "auth/user-not-found":
-          setError("User not found.");
-          break;
+      // Refresh latest user data
+      await user.reload();
 
-        case "auth/wrong-password":
-          setError("Wrong password.");
-          break;
+      // Email verification check
+      if (!auth.currentUser?.emailVerified) {
+        await signOut(auth);
 
-        default:
-          setError("Login failed.");
+        router.push("/verify-email");
+
+        return;
       }
-    }
 
-    setLoading(false);
+      // Update Firestore
+      await updateDoc(doc(db, "users", user.uid), {
+        emailVerified: true,
+      });
+
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "code" in err
+      ) {
+        const firebaseError = err as {
+          code: string;
+        };
+
+        switch (firebaseError.code) {
+          case "auth/invalid-credential":
+            setError("Invalid email or password.");
+            break;
+
+          case "auth/user-not-found":
+            setError("User not found.");
+            break;
+
+          case "auth/wrong-password":
+            setError("Incorrect password.");
+            break;
+
+          case "auth/too-many-requests":
+            setError(
+              "Too many login attempts. Please try again later."
+            );
+            break;
+
+          default:
+            setError("Login failed. Please try again.");
+        }
+      } else {
+        setError("Something went wrong.");
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <main className="min-h-screen bg-[#07142D] flex items-center justify-center px-4">
-
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
-
+      <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">
         <div className="text-center">
-
           <h1 className="text-4xl font-bold text-blue-600">
             EarnNova
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="mt-2 text-gray-500">
             Welcome Back
           </p>
-
         </div>
 
         {error && (
-          <div className="mt-6 bg-red-100 border border-red-300 rounded-xl p-3 text-red-700 text-sm">
+          <div className="mt-6 rounded-xl border border-red-300 bg-red-100 p-3 text-sm text-red-700">
             {error}
           </div>
         )}
 
         <form
           onSubmit={handleLogin}
-          className="space-y-5 mt-8"
+          className="mt-8 space-y-5"
         >
-
           <input
             type="email"
             placeholder="Email Address"
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-600"
             value={email}
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
           <input
             type="password"
             placeholder="Password"
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full rounded-xl border px-4 py-3 outline-none focus:border-blue-600"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold"
+            className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
           >
             {loading ? "Signing In..." : "Login"}
           </button>
-
         </form>
 
-        <p className="text-center mt-8 text-gray-500">
+        <div className="mt-5 text-center">
+          <Link
+            href="/forgot-password"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        </div>
 
+        <p className="mt-8 text-center text-gray-500">
           Don't have an account?
-
           <Link
             href="/signup"
-            className="text-blue-600 font-semibold ml-2"
+            className="ml-2 font-semibold text-blue-600"
           >
             Signup
           </Link>
-
         </p>
-
       </div>
-
     </main>
   );
 }
