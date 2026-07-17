@@ -26,9 +26,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <nav className="hidden lg:flex gap-8 font-medium">
           <Link href="/">Home</Link>
-          <Link href="/investment">Investment</Link>
-          <Link href="/surveys">Surveys</Link>
-          <Link href="/wallet">Wallet</Link>
+          <Link href="/#services">Our Services</Link>
           <Link href="/contact">Contact</Link>
         </nav>
 
@@ -36,22 +34,22 @@ export default function Navbar() {
         <div className="hidden lg:flex gap-3">
           <Link
             href="/login"
-            className="border border-blue-600 text-blue-600 px-5 py-2 rounded-xl"
+            className="border border-blue-600 text-blue-600 px-5 py-2 rounded-xl hover:bg-blue-50 transition"
           >
             Login
           </Link>
 
           <Link
             href="/signup"
-            className="bg-blue-600 text-white px-5 py-2 rounded-xl"
+            className="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition"
           >
             Get Started
           </Link>
         </div>
 
-        {/* Mobile */}
+        {/* Mobile Menu Button */}
         <button className="lg:hidden">
-          <Menu />
+          <Menu size={28} />
         </button>
       </div>
     </header>
