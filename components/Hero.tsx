@@ -2,21 +2,22 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="bg-[#07152d] text-white min-h-screen flex items-center">
+    <section className="bg-[#07152d] text-white min-h-screen flex items-center py-16">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+        
         {/* Left Side */}
         <div>
-          <span className="bg-blue-600 px-4 py-2 rounded-full text-sm">
+          <span className="inline-block bg-blue-600 px-4 py-2 rounded-full text-sm font-medium">
             #1 Earning Platform
           </span>
 
-          <h1 className="text-6xl font-bold mt-8 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-8 leading-tight">
             Earn Smarter,
             <br />
             <span className="text-blue-500">Every Day</span>
           </h1>
 
-          <p className="text-gray-300 mt-8 text-lg leading-8">
+          <p className="text-gray-300 mt-8 text-lg leading-8 max-w-xl">
             Join EarnNova and start earning by completing surveys,
             watching ads, completing offers, investing and referring
             friends.
@@ -26,21 +27,21 @@ export default function Hero() {
           <div className="mt-10 flex flex-wrap gap-5">
             <Link
               href="/#services"
-              className="bg-blue-600 px-8 py-4 rounded-xl hover:bg-blue-700 transition duration-300"
+              className="bg-blue-600 hover:bg-blue-700 transition px-8 py-4 rounded-xl font-semibold"
             >
               Our Services
             </Link>
 
             <Link
               href="/contact"
-              className="border border-white px-8 py-4 rounded-xl hover:bg-white hover:text-[#07152d] transition duration-300"
+              className="border border-white hover:bg-white hover:text-[#07152d] transition px-8 py-4 rounded-xl font-semibold"
             >
               Contact Us
             </Link>
           </div>
 
           {/* Features */}
-          <div className="flex flex-wrap gap-8 mt-12 text-gray-200">
+          <div className="flex flex-wrap gap-8 mt-12 text-gray-300">
             <span>✔ Secure</span>
             <span>✔ Fast Payments</span>
             <span>✔ Trusted</span>
@@ -57,14 +58,16 @@ export default function Hero() {
             <div className="bg-blue-600 rounded-xl mt-6 p-6 text-white">
               <p>Total Balance</p>
 
-              <h3 className="text-4xl font-bold mt-2">$256.80</h3>
+              <h3 className="text-4xl font-bold mt-2">
+                $256.80
+              </h3>
 
               <div className="flex gap-3 mt-6">
                 <button className="bg-white text-blue-600 px-5 py-2 rounded-lg font-medium">
                   Deposit
                 </button>
 
-                <button className="bg-blue-800 px-5 py-2 rounded-lg font-medium hover:bg-blue-900 transition">
+                <button className="bg-blue-800 hover:bg-blue-900 transition px-5 py-2 rounded-lg font-medium">
                   Withdraw
                 </button>
               </div>
@@ -88,6 +91,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
