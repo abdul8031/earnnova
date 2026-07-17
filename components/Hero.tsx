@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section className="bg-[#07152d] text-white min-h-screen flex items-center py-16">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-        
+
         {/* Left Side */}
         <div>
           <span className="inline-block bg-blue-600 px-4 py-2 rounded-full text-sm font-medium">
@@ -26,17 +26,17 @@ export default function Hero() {
           {/* Buttons */}
           <div className="mt-10 flex flex-wrap gap-5">
             <Link
-              href="/#services"
-              className="bg-blue-600 hover:bg-blue-700 transition px-8 py-4 rounded-xl font-semibold"
+              href="/signup"
+              className="bg-blue-600 hover:bg-blue-700 transition duration-300 px-8 py-4 rounded-xl font-semibold shadow-lg"
             >
-              Our Services
+              Get Started
             </Link>
 
             <Link
-              href="/contact"
-              className="border border-white hover:bg-white hover:text-[#07152d] transition px-8 py-4 rounded-xl font-semibold"
+              href="/login"
+              className="border border-white hover:bg-white hover:text-[#07152d] transition duration-300 px-8 py-4 rounded-xl font-semibold"
             >
-              Contact Us
+              Login
             </Link>
           </div>
 
@@ -51,6 +51,7 @@ export default function Hero() {
         {/* Right Side */}
         <div className="flex justify-center">
           <div className="bg-white rounded-3xl p-8 w-full max-w-[360px] shadow-2xl">
+
             <h2 className="text-black text-2xl font-bold">
               EarnNova Dashboard
             </h2>
@@ -63,7 +64,7 @@ export default function Hero() {
               </h3>
 
               <div className="flex gap-3 mt-6">
-                <button className="bg-white text-blue-600 px-5 py-2 rounded-lg font-medium">
+                <button className="bg-white text-blue-600 px-5 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
                   Deposit
                 </button>
 
@@ -89,6 +90,7 @@ export default function Hero() {
                 <span className="font-semibold">152</span>
               </div>
             </div>
+
           </div>
         </div>
 

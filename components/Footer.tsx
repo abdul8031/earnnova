@@ -6,54 +6,52 @@ import {
   FaYoutube,
   FaEnvelope,
   FaPhone,
-  FaComments,
-  FaClock,
 } from "react-icons/fa6";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#07142d] text-white pt-16 pb-6">
-      <div className="max-w-7xl mx-auto px-6">
+    <footer className="bg-[#07152d] text-white">
+      <div className="max-w-7xl mx-auto px-6 py-16">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
 
-          {/* Company */}
+          {/* Logo */}
           <div>
-            <h2 className="text-3xl font-bold text-white">
-              Earn<span className="text-blue-500">Nova</span>
+            <h2 className="text-3xl font-bold">
+              <span className="text-blue-500">Earn</span>Nova
             </h2>
 
-            <p className="text-gray-400 mt-5 text-sm leading-7">
-              EarnNova is a trusted earning platform where you can earn
-              by completing tasks, surveys, watching ads and much more.
+            <p className="text-gray-400 mt-5 leading-7">
+              EarnNova is a modern earning platform where users can earn
+              online by completing tasks, surveys and referrals.
             </p>
 
             <div className="flex gap-3 mt-6">
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-[#0d2346] hover:bg-blue-600 flex items-center justify-center transition"
+                className="w-10 h-10 rounded-full bg-[#10254d] hover:bg-blue-600 flex items-center justify-center transition"
               >
                 <FaFacebookF />
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-[#0d2346] hover:bg-blue-600 flex items-center justify-center transition"
+                className="w-10 h-10 rounded-full bg-[#10254d] hover:bg-blue-600 flex items-center justify-center transition"
               >
                 <FaXTwitter />
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-[#0d2346] hover:bg-blue-600 flex items-center justify-center transition"
+                className="w-10 h-10 rounded-full bg-[#10254d] hover:bg-blue-600 flex items-center justify-center transition"
               >
                 <FaTelegram />
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-[#0d2346] hover:bg-red-600 flex items-center justify-center transition"
+                className="w-10 h-10 rounded-full bg-[#10254d] hover:bg-red-600 flex items-center justify-center transition"
               >
                 <FaYoutube />
               </a>
@@ -61,100 +59,77 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Navigation */}
 
           <div>
-            <h3 className="font-bold text-xl mb-5">Quick Links</h3>
+            <h3 className="text-xl font-semibold mb-5">
+              Navigation
+            </h3>
 
             <ul className="space-y-3 text-gray-400">
 
-              <li><Link href="/">Home</Link></li>
+              <li>
+                <Link href="/" className="hover:text-white">
+                  Home
+                </Link>
+              </li>
 
-              <li><Link href="/how-it-works">How It Works</Link></li>
+              <li>
+                <Link href="/#services" className="hover:text-white">
+                  Our Services
+                </Link>
+              </li>
 
-              <li><Link href="/earn">Earn</Link></li>
-
-              <li><Link href="/features">Features</Link></li>
-
-              <li><Link href="/pricing">Pricing</Link></li>
-
-              <li><Link href="/contact">Contact</Link></li>
+              <li>
+                <Link href="/contact" className="hover:text-white">
+                  Contact
+                </Link>
+              </li>
 
             </ul>
-
           </div>
 
-          {/* Support */}
+          {/* Account */}
 
           <div>
-
-            <h3 className="font-bold text-xl mb-5">Support</h3>
+            <h3 className="text-xl font-semibold mb-5">
+              Account
+            </h3>
 
             <ul className="space-y-3 text-gray-400">
 
-              <li><Link href="/help-center">Help Center</Link></li>
+              <li>
+                <Link href="/login" className="hover:text-white">
+                  Login
+                </Link>
+              </li>
 
-              <li><Link href="/faq">FAQ</Link></li>
-
-              <li><Link href="/terms">Terms of Service</Link></li>
-
-              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-
-              <li><Link href="/payment-proof">Payment Proof</Link></li>
-
-              <li><Link href="/contact">Contact Us</Link></li>
-
-            </ul>
-
-          </div>
-
-          {/* Earning */}
-
-          <div>
-
-            <h3 className="font-bold text-xl mb-5">Earning</h3>
-
-            <ul className="space-y-3 text-gray-400">
-
-              <li><Link href="/surveys">Surveys</Link></li>
-
-              <li><Link href="/watch-ads">Watch Ads</Link></li>
-
-              <li><Link href="/offers">Offers</Link></li>
-
-              <li><Link href="/daily-bonus">Daily Bonus</Link></li>
-
-              <li><Link href="/referral">Referral Program</Link></li>
+              <li>
+                <Link href="/signup" className="hover:text-white">
+                  Get Started
+                </Link>
+              </li>
 
             </ul>
-
           </div>
 
           {/* Contact */}
 
           <div>
 
-            <h3 className="font-bold text-xl mb-5">Contact Us</h3>
+            <h3 className="text-xl font-semibold mb-5">
+              Contact
+            </h3>
 
-            <div className="space-y-5 text-gray-400">
+            <div className="space-y-4 text-gray-400">
 
-              <div className="flex gap-3">
-                <FaEnvelope className="mt-1 text-blue-500" />
-                <span>support@earnnova.com</span>
+              <div className="flex gap-3 items-center">
+                <FaEnvelope className="text-blue-500" />
+                <span>support@earnnova.site</span>
               </div>
 
-              <div className="flex gap-3">
-                <FaPhone className="mt-1 text-blue-500" />
-                <span>+92 300 1234567</span>
-              </div>
-
-              <div className="flex gap-3">
-                <FaComments className="mt-1 text-blue-500" />
-                <span>Live Chat</span>
-              </div>
-
-              <div className="flex gap-3">
-                <FaClock className="mt-1 text-blue-500" />
+              <div className="flex gap-3 items-center">
+                <FaPhone className="text-blue-500" />
                 <span>24/7 Support</span>
               </div>
 
@@ -164,9 +139,9 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-gray-700 mt-12 pt-6 text-center text-gray-400 text-sm">
+        <div className="border-t border-gray-700 mt-12 pt-6 text-center text-gray-400">
 
-          © {new Date().getFullYear()} EarnNova. All rights reserved.
+          © {new Date().getFullYear()} EarnNova. All Rights Reserved.
 
         </div>
 
