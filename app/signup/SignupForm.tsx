@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
@@ -64,8 +65,15 @@ export default function SignupForm() {
 
       const user = userCredential.user;
 
+      // Save full name in Firebase Authentication
+      await updateProfile(user, {
+        displayName: fullName,
+      });
+
+      // Send verification email
       await sendEmailVerification(user);
 
+      // Save user data in Firestore
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
 
@@ -80,6 +88,12 @@ export default function SignupForm() {
         pendingBalance: 0,
 
         totalEarned: 0,
+
+        todayEarnings: 0,
+
+        totalReferrals: 0,
+
+        membership: "Free",
 
         referralCode: user.uid
           .substring(0, 8)
@@ -165,9 +179,7 @@ export default function SignupForm() {
               type="text"
               placeholder="Enter your full name"
               value={fullName}
-              onChange={(e) =>
-                setFullName(e.target.value)
-              }
+              onChange={(e) => setFullName(e.target.value)}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
             />
           </div>
@@ -181,9 +193,7 @@ export default function SignupForm() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
             />
           </div>
@@ -197,9 +207,7 @@ export default function SignupForm() {
               type="password"
               placeholder="Create password"
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
             />
           </div>
@@ -213,9 +221,7 @@ export default function SignupForm() {
               type="password"
               placeholder="Confirm password"
               value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(e.target.value)
-              }
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
             />
           </div>
