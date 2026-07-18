@@ -1,27 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import useDashboardData from "@/components/dashboard/DashboardData";
 
 export default function UserProfile() {
-  const [name, setName] = useState("User");
-  const [email, setEmail] = useState("");
+  const { userData, loading } = useDashboardData();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setName(user.displayName || "User");
-        setEmail(user.email || "");
-      }
-    });
+  if (loading) {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 rounded-full bg-gray-300 animate-pulse" />
 
-    return () => unsubscribe();
-  }, []);
+        <div className="hidden md:block">
+          <div className="h-4 w-24 rounded bg-gray-300 animate-pulse mb-2" />
+          <div className="h-3 w-36 rounded bg-gray-200 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
+  const name = userData?.fullName || "User";
+  const email = userData?.email || "";
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+    <div className="flex items-center gap-3 cursor-pointer">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
         {name.charAt(0).toUpperCase()}
       </div>
 
