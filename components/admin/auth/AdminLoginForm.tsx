@@ -1,97 +1,123 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { auth, db } from "@/lib/firebase";
-
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function AdminLoginForm() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setLoading(true);
     setError("");
+    setLoading(true);
 
     try {
-      if (email !== "allverzo0@gmail.com") {
-        throw new Error("Access Denied");
-      }
-
-      const result = await signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      const userDoc = await getDoc(
-        doc(db, "users", result.user.uid)
-      );
+      const user = userCredential.user;
 
-      if (
-        !userDoc.exists() ||
-        userDoc.data().role !== "admin"
-      ) {
-        throw new Error("You are not an admin.");
+      // Admin email check
+      const adminEmails = [
+        "admin@earnnova.site",
+      ];
+
+      if (!adminEmails.includes(user.email || "")) {
+        setError("You are not authorized as admin.");
+        setLoading(false);
+        return;
       }
 
-      router.push("/admin");
-    } catch (err: any) {
-      setError(err.message || "Login Failed");
-    }
+      router.push("/admin/dashboard");
 
-    setLoading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
+
   return (
-    <div className="w-full max-w-md rounded-2xl bg-white shadow-xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
 
-      <h1 className="mb-8 text-center text-3xl font-bold text-blue-600">
-        EarnNova Admin
-      </h1>
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
 
-      <form onSubmit={handleLogin} className="space-y-5">
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Admin Login
+        </h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border p-3"
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border p-3"
-        />
 
         {error && (
-          <p className="text-red-600 text-sm">
+          <div className="mb-4 rounded-lg bg-red-100 px-4 py-3 text-sm text-red-700">
             {error}
-          </p>
+          </div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white"
-        >
-          {loading ? "Please Wait..." : "Login"}
-        </button>
 
-      </form>
+        <form onSubmit={handleLogin} className="space-y-4">
+
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Email
+            </label>
+
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@email.com"
+              required
+              className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Password
+            </label>
+
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="********"
+              required
+              className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-3 text-white font-semibold hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+
+        </form>
+
+      </div>
 
     </div>
   );
