@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+
 import {
   collection,
   onSnapshot,
@@ -70,21 +72,15 @@ export default function TaskTable() {
 
     try {
 
-      const taskRef = doc(
-        db,
-        "tasks",
-        id
+      await updateDoc(
+        doc(db, "tasks", id),
+        {
+          status:
+            currentStatus === "active"
+              ? "inactive"
+              : "active",
+        }
       );
-
-
-      await updateDoc(taskRef, {
-
-        status:
-          currentStatus === "active"
-            ? "inactive"
-            : "active",
-
-      });
 
 
     } catch(error) {
@@ -97,6 +93,7 @@ export default function TaskTable() {
     }
 
   }
+
 
 
 
@@ -130,6 +127,7 @@ export default function TaskTable() {
 
 
 
+
   const filteredTasks = tasks.filter((task) =>
     task.title
       ?.toLowerCase()
@@ -160,19 +158,11 @@ export default function TaskTable() {
       <div className="mb-5">
 
         <input
-
           type="text"
-
           placeholder="Search tasks..."
-
           value={search}
-
-          onChange={(e)=>
-            setSearch(e.target.value)
-          }
-
+          onChange={(e)=>setSearch(e.target.value)}
           className="w-full md:w-96 rounded-lg border px-4 py-3"
-
         />
 
       </div>
@@ -183,21 +173,13 @@ export default function TaskTable() {
         filteredTasks.length === 0 ?
 
 
-        (
-
-          <div className="text-center py-10 text-gray-500">
-
-            No tasks found.
-
-          </div>
-
-        )
+        <div className="text-center py-10 text-gray-500">
+          No tasks found.
+        </div>
 
 
         :
 
-
-        (
 
         <div className="overflow-x-auto">
 
@@ -209,36 +191,29 @@ export default function TaskTable() {
 
               <tr className="border-b">
 
-
                 <th className="text-left p-3">
                   Title
                 </th>
-
 
                 <th className="text-left p-3">
                   Category
                 </th>
 
-
                 <th className="text-left p-3">
                   Reward
                 </th>
-
 
                 <th className="text-left p-3">
                   Time
                 </th>
 
-
                 <th className="text-left p-3">
                   Status
                 </th>
 
-
                 <th className="text-left p-3">
                   Actions
                 </th>
-
 
               </tr>
 
@@ -252,7 +227,6 @@ export default function TaskTable() {
             {
               filteredTasks.map((task)=>(
 
-
                 <tr
                   key={task.id}
                   className="border-b hover:bg-gray-50"
@@ -264,11 +238,9 @@ export default function TaskTable() {
                   </td>
 
 
-
                   <td className="p-3">
                     {task.category}
                   </td>
-
 
 
                   <td className="p-3 text-green-600 font-bold">
@@ -276,19 +248,15 @@ export default function TaskTable() {
                   </td>
 
 
-
                   <td className="p-3">
                     {task.time}s
                   </td>
 
 
-
                   <td className="p-3">
-
 
                     {
                       task.status === "active"
-
 
                       ?
 
@@ -296,36 +264,37 @@ export default function TaskTable() {
                         Active
                       </span>
 
-
                       :
-
 
                       <span className="rounded-full bg-red-100 px-3 py-1 text-red-700">
                         Inactive
                       </span>
-
                     }
 
-
                   </td>
-
 
 
 
                   <td className="p-3 space-x-2">
 
 
-                    <button
+                    <Link
+                      href={`/admin/tasks/edit/${task.id}`}
+                      className="rounded bg-yellow-500 px-3 py-1 text-white"
+                    >
+                      Edit
+                    </Link>
 
+
+
+                    <button
                       onClick={() =>
                         toggleStatus(
                           task.id,
                           task.status
                         )
                       }
-
                       className="rounded bg-blue-600 px-3 py-1 text-white"
-
                     >
 
                       {
@@ -339,17 +308,12 @@ export default function TaskTable() {
 
 
                     <button
-
                       onClick={() =>
                         deleteTask(task.id)
                       }
-
                       className="rounded bg-red-600 px-3 py-1 text-white"
-
                     >
-
                       Delete
-
                     </button>
 
 
@@ -357,7 +321,6 @@ export default function TaskTable() {
 
 
                 </tr>
-
 
               ))
             }
@@ -370,8 +333,6 @@ export default function TaskTable() {
 
 
         </div>
-
-        )
 
       }
 
