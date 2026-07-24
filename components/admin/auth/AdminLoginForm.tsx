@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
 export default function AdminLoginForm() {
@@ -29,12 +30,20 @@ export default function AdminLoginForm() {
 
       const user = userCredential.user;
 
-      // Admin email check
-      const adminEmails = [
-        "admin@earnnova.site",
-      ];
+      // Firestore user document check
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
 
-      if (!adminEmails.includes(user.email || "")) {
+      if (!userSnap.exists()) {
+        setError("Admin profile not found.");
+        setLoading(false);
+        return;
+      }
+
+      const userData = userSnap.data();
+
+      // Role check
+      if (userData.role !== "admin") {
         setError("You are not authorized as admin.");
         setLoading(false);
         return;
@@ -53,7 +62,6 @@ export default function AdminLoginForm() {
     }
   }
 
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
 
@@ -63,16 +71,13 @@ export default function AdminLoginForm() {
           Admin Login
         </h1>
 
-
         {error && (
           <div className="mb-4 rounded-lg bg-red-100 px-4 py-3 text-sm text-red-700">
             {error}
           </div>
         )}
 
-
         <form onSubmit={handleLogin} className="space-y-4">
-
 
           <div>
             <label className="block text-sm font-medium mb-1">
@@ -89,7 +94,6 @@ export default function AdminLoginForm() {
             />
           </div>
 
-
           <div>
             <label className="block text-sm font-medium mb-1">
               Password
@@ -105,7 +109,6 @@ export default function AdminLoginForm() {
             />
           </div>
 
-
           <button
             type="submit"
             disabled={loading}
@@ -113,7 +116,6 @@ export default function AdminLoginForm() {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-
 
         </form>
 
