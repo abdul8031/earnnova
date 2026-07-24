@@ -30,21 +30,39 @@ export default function AdminLoginForm() {
 
       const user = userCredential.user;
 
+      console.log("Logged UID:", user.uid);
+      console.log("Logged Email:", user.email);
+
+      // Admin email check
+      const adminEmails = [
+        "allverzo0@gmail.com",
+      ];
+
+      if (!adminEmails.includes(user.email || "")) {
+        setError("This email is not registered as admin.");
+        setLoading(false);
+        return;
+      }
+
       // Firestore user document check
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
+      console.log("Firestore Exists:", userSnap.exists());
+
       if (!userSnap.exists()) {
-        setError("Admin profile not found.");
+        setError("Admin profile not found in database.");
         setLoading(false);
         return;
       }
 
       const userData = userSnap.data();
 
+      console.log("User Data:", userData);
+
       // Role check
       if (userData.role !== "admin") {
-        setError("You are not authorized as admin.");
+        setError("Role is not admin.");
         setLoading(false);
         return;
       }
@@ -52,6 +70,8 @@ export default function AdminLoginForm() {
       router.push("/admin/dashboard");
 
     } catch (error: unknown) {
+      console.error(error);
+
       if (error instanceof Error) {
         setError(error.message);
       } else {
@@ -94,6 +114,7 @@ export default function AdminLoginForm() {
             />
           </div>
 
+
           <div>
             <label className="block text-sm font-medium mb-1">
               Password
@@ -108,6 +129,7 @@ export default function AdminLoginForm() {
               className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
 
           <button
             type="submit"
