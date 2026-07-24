@@ -1,8 +1,7 @@
-export default function AnnouncementsPage() {
+export default function AdsPage() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Announcements</h1>
-      <p>Coming Soon...</p>
+    <div>
+      <h1>Ads Management</h1>
     </div>
   );
 }
