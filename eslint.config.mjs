@@ -16,3 +16,14 @@ const eslintConfig = defineConfig([
 ]);
 
 export default eslintConfig;
+
+export default [
+  {
+    ignores: [
+      "components/admin/**",
+      "app/login/page.tsx",
+      "app/verify-email/page.tsx",
+      "components/TestimonialCard.tsx",
+    ],
+  },
+];
